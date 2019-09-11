@@ -25,7 +25,7 @@
 //    
 //    
 
-#include <TimerOne.h>    // Librería para interrupción
+#include <timer.h>
 
 const int selectPins[4] = {8, 9, 10, 11}; // Pines de Arduino para todos los multiplexores (compartidos)
 const int z1Output = 7; // Conexión a Z/SIG de Multiplexor1
@@ -56,6 +56,9 @@ int trama_array[143]; //Tamaño del array
 int nuevo_byte; //byte leido
 int indice_lectura = 0; //celdas del array
 
+// Timer con 2 tareas y resolucion de microsegundos
+Timer<2, micros> timer;
+
 void setup() {
   Serial.begin(9600); //Velocidad de comunicación
 
@@ -70,8 +73,8 @@ void setup() {
   
   //Establece el tiempo de interrupción
   attachInterrupt(1, zero_crosss_int, RISING);
-  Timer1.initialize(100); // Temporizador de 100 microsegundos para 50Hz o de 83 para 60Hz;
-  Timer1.attachInterrupt( timerIsr ); // Establece la interrupción desde la función
+  // Temporizador de 100 microsegundos para 50Hz o de 83 para 60Hz;
+  timer.every(100, timerIsr_high);
   
   CH0=CH1=CH2=CH3=CH4=CH5=CH6=95; // Bombillas en Off al empezar el programa(95 - FULLY OFF ; 5 - FULLY ON)
   CH7=CH8=CH9=CH10=CH11=CH12=95;
@@ -82,110 +85,147 @@ void setup() {
   }
 }
 
-void timerIsr(){
+bool timerIsr_high(void *){
   clock_tick++;
-  
-  //Esto le indica al dimmer la intensidad por velocidad de pulso
-  
-  //Según el canal del Dimmer se selecciona la salida Y0 a Y15(selectMuxPin) del multiplexor
-  //que corresponda (z1Output o z2Output)
-  
+
   if (CH0==clock_tick){
     selectMuxPin(0);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH1==clock_tick){
     selectMuxPin(1);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH2==clock_tick){
     selectMuxPin(2);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH3==clock_tick){
     selectMuxPin(3);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH4==clock_tick){
     selectMuxPin(4);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH5==clock_tick){
     selectMuxPin(5);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH6==clock_tick){
     selectMuxPin(6);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH7==clock_tick){
     selectMuxPin(7);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH8==clock_tick){
     selectMuxPin(8);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH9==clock_tick){
     selectMuxPin(9);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH10==clock_tick){
     selectMuxPin(10);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH11==clock_tick){
     selectMuxPin(11);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH12==clock_tick){
     selectMuxPin(12);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH13==clock_tick){
     selectMuxPin(13);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH14==clock_tick){
     selectMuxPin(14);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
-    digitalWrite(z1Output, LOW); // triac Off
   }
   if (CH15==clock_tick){
     selectMuxPin(15);
     digitalWrite(z1Output, HIGH); // triac firing
-    delayMicroseconds(10); // triac On propogation delay (for 60Hz use 8.33)
+  }
+
+  timer.in(10, timerIsr_low);
+
+  return true; // repeat? true
+
+}
+
+bool timerIsr_low(void *){
+  if (CH0==clock_tick){
+    selectMuxPin(0);
     digitalWrite(z1Output, LOW); // triac Off
   }
+  if (CH1==clock_tick){
+    selectMuxPin(1);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH2==clock_tick){
+    selectMuxPin(2);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH3==clock_tick){
+    selectMuxPin(3);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH4==clock_tick){
+    selectMuxPin(4);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH5==clock_tick){
+    selectMuxPin(5);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH6==clock_tick){
+    selectMuxPin(6);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH7==clock_tick){
+    selectMuxPin(7);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH8==clock_tick){
+    selectMuxPin(8);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH9==clock_tick){
+    selectMuxPin(9);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH10==clock_tick){
+    selectMuxPin(10);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH11==clock_tick){
+    selectMuxPin(11);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH12==clock_tick){
+    selectMuxPin(12);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH13==clock_tick){
+    selectMuxPin(13);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH14==clock_tick){
+    selectMuxPin(14);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+  if (CH15==clock_tick){
+    selectMuxPin(15);
+    digitalWrite(z1Output, LOW); // triac Off
+  }
+
+  return false; // repeat? false
 }
 
 void zero_crosss_int(){ // function to be fired at the zero crossing to dim the light
@@ -196,6 +236,8 @@ void zero_crosss_int(){ // function to be fired at the zero crossing to dim the 
 }
 
 void loop(){
+  timer.tick(); // tick the timer
+
   while(Serial.available()==0){ //Mientras no lea dato de Serial, espera
     //esperar
     
