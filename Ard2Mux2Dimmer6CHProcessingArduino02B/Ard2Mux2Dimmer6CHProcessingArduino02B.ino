@@ -238,120 +238,119 @@ void zero_crosss_int(){ // function to be fired at the zero crossing to dim the 
 void loop(){
   timer.tick(); // tick the timer
 
-  while(Serial.available()==0){ //Mientras no lea dato de Serial, espera
-    //esperar
-    
-  }
+  if(Serial.available()>0){
   
-  nuevo_byte = Serial.read(); //Lee el byte 
-  if (nuevo_byte == inicio_de_trama) { //Si el byte es el de control
-    indice_lectura = 0; //pone el contador a 0
+    nuevo_byte = Serial.read(); //Lee el byte
+    if (nuevo_byte == inicio_de_trama) { //Si el byte es el de control
+      indice_lectura = 0; //pone el contador a 0
 
-    if(trama_array[0]>=0){
-      CH0=trama_array[0];
-      CH0=100-CH0;
-      if(CH0<5){CH0=5;}
-      if(CH0>95){CH0=95;}
-    }
-    if(trama_array[1]>=0){
-      CH1=trama_array[1];
-      CH1=100-CH1;
-      if(CH1<5){CH1=5;}
-      if(CH1>95){CH1=95;}
-    }
-    if(trama_array[2]>=0){
-      CH2=trama_array[2];
-      CH2=100-CH2;
-      if(CH2<5){CH2=5;}
-      if(CH2>95){CH2=95;}
-    }
-    if(trama_array[3]>=0){
-      CH3=trama_array[3];
-      CH3=100-CH3;
-      if(CH3<5){CH3=5;}
-      if(CH3>95){CH3=95;}
-    }
-    if(trama_array[4]>=0){
-      CH4=trama_array[4];
-      CH4=100-CH4;
-      if(CH4<5){CH4=5;}
-      if(CH4>95){CH4=95;}
-    }
-    if(trama_array[5]>=0){
-      CH5=trama_array[5];
-      CH5=100-CH5;
-      if(CH5<5){CH5=5;}
-      if(CH5>95){CH5=95;}
-    }
-    if(trama_array[6]>=0){
-      CH6=trama_array[6];
-      CH6=100-CH6;
-      if(CH6<5){CH6=5;}
-      if(CH6>95){CH6=95;}
-    }
-    if(trama_array[7]>=0){
-      CH7=trama_array[7];
-      CH7=100-CH7;
-      if(CH7<5){CH7=5;}
-      if(CH7>95){CH7=95;}
-    }
-    if(trama_array[8]>=0){
-      CH8=trama_array[8];
-      CH8=100-CH8;
-      if(CH8<5){CH8=5;}
-      if(CH8>95){CH8=95;}
-    }
-    if(trama_array[9]>=0){
-      CH9=trama_array[9];
-      CH9=100-CH9;
-      if(CH9<5){CH9=5;}
-      if(CH9>95){CH9=95;}
-    }
-    if(trama_array[10]>=0){
-      CH10=trama_array[10];
-      CH10=100-CH10;
-      if(CH10<5){CH10=5;}
-      if(CH10>95){CH10=95;}
-    }
-    if(trama_array[11]>=0){
-      CH11=trama_array[11];
-      CH11=100-CH11;
-      if(CH11<5){CH11=5;}
-      if(CH11>95){CH11=95;}
-    }
-    if(trama_array[12]>=0){
-      CH12=trama_array[12];
-      CH12=100-CH12;
-      if(CH12<5){CH12=5;}
-      if(CH12>95){CH12=95;}
-    }
-    if(trama_array[13]>=0){
-      CH13=trama_array[13];
-      CH13=100-CH13;
-      if(CH13<5){CH13=5;}
-      if(CH13>95){CH13=95;}
-    }
-    if(trama_array[14]>=0){
-      CH14=trama_array[14];
-      CH14=100-CH14;
-      if(CH14<5){CH14=5;}
-      if(CH14>95){CH14=95;}
-    }
-    if(trama_array[15]>=0){
-      CH15=trama_array[15];
-      CH15=100-CH15;
-      if(CH15<5){CH15=5;}
-      if(CH15>95){CH15=95;}
-    }
-    
-  }else{
-    //Si no es el byte de control, va almacenando los bytes en el array
-    if (indice_lectura < trama_longitud) {
-      trama_array[indice_lectura] = nuevo_byte;
-      indice_lectura++;
+      if(trama_array[0]>=0){
+        CH0=trama_array[0];
+        CH0=100-CH0;
+        if(CH0<5){CH0=5;}
+        if(CH0>95){CH0=95;}
+      }
+      if(trama_array[1]>=0){
+        CH1=trama_array[1];
+        CH1=100-CH1;
+        if(CH1<5){CH1=5;}
+        if(CH1>95){CH1=95;}
+      }
+      if(trama_array[2]>=0){
+        CH2=trama_array[2];
+        CH2=100-CH2;
+        if(CH2<5){CH2=5;}
+        if(CH2>95){CH2=95;}
+      }
+      if(trama_array[3]>=0){
+        CH3=trama_array[3];
+        CH3=100-CH3;
+        if(CH3<5){CH3=5;}
+        if(CH3>95){CH3=95;}
+      }
+      if(trama_array[4]>=0){
+        CH4=trama_array[4];
+        CH4=100-CH4;
+        if(CH4<5){CH4=5;}
+        if(CH4>95){CH4=95;}
+      }
+      if(trama_array[5]>=0){
+        CH5=trama_array[5];
+        CH5=100-CH5;
+        if(CH5<5){CH5=5;}
+        if(CH5>95){CH5=95;}
+      }
+      if(trama_array[6]>=0){
+        CH6=trama_array[6];
+        CH6=100-CH6;
+        if(CH6<5){CH6=5;}
+        if(CH6>95){CH6=95;}
+      }
+      if(trama_array[7]>=0){
+        CH7=trama_array[7];
+        CH7=100-CH7;
+        if(CH7<5){CH7=5;}
+        if(CH7>95){CH7=95;}
+      }
+      if(trama_array[8]>=0){
+        CH8=trama_array[8];
+        CH8=100-CH8;
+        if(CH8<5){CH8=5;}
+        if(CH8>95){CH8=95;}
+      }
+      if(trama_array[9]>=0){
+        CH9=trama_array[9];
+        CH9=100-CH9;
+        if(CH9<5){CH9=5;}
+        if(CH9>95){CH9=95;}
+      }
+      if(trama_array[10]>=0){
+        CH10=trama_array[10];
+        CH10=100-CH10;
+        if(CH10<5){CH10=5;}
+        if(CH10>95){CH10=95;}
+      }
+      if(trama_array[11]>=0){
+        CH11=trama_array[11];
+        CH11=100-CH11;
+        if(CH11<5){CH11=5;}
+        if(CH11>95){CH11=95;}
+      }
+      if(trama_array[12]>=0){
+        CH12=trama_array[12];
+        CH12=100-CH12;
+        if(CH12<5){CH12=5;}
+        if(CH12>95){CH12=95;}
+      }
+      if(trama_array[13]>=0){
+        CH13=trama_array[13];
+        CH13=100-CH13;
+        if(CH13<5){CH13=5;}
+        if(CH13>95){CH13=95;}
+      }
+      if(trama_array[14]>=0){
+        CH14=trama_array[14];
+        CH14=100-CH14;
+        if(CH14<5){CH14=5;}
+        if(CH14>95){CH14=95;}
+      }
+      if(trama_array[15]>=0){
+        CH15=trama_array[15];
+        CH15=100-CH15;
+        if(CH15<5){CH15=5;}
+        if(CH15>95){CH15=95;}
+      }
+
     }else{
-      //Error
+      //Si no es el byte de control, va almacenando los bytes en el array
+      if (indice_lectura < trama_longitud) {
+        trama_array[indice_lectura] = nuevo_byte;
+        indice_lectura++;
+      }else{
+        //Error
+      }
     }
+
   }
   
 }
